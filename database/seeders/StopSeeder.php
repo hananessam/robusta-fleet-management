@@ -13,6 +13,42 @@ class StopSeeder extends Seeder
      */
     public function run(): void
     {
-        Stop::factory()->count(20)->create();
+        $stops = [
+            [
+                'trip_id' => 1,
+                'city_from_id' => 1,
+                'city_to_id' => 4,
+                'datetime_from' => '2023-09-12 04:30',
+                'datetime_to' => '2023-09-12 07:30',
+            ],
+            [
+                'trip_id' => 1,
+                'city_from_id' => 4,
+                'city_to_id' => 3,
+                'datetime_from' => '2023-09-12 08:00',
+                'datetime_to' => '2023-09-12 11:30',
+            ],
+            [
+                'trip_id' => 1,
+                'city_from_id' => 1, // cairo
+                'city_to_id' => 10, // alfayum
+                'datetime_from' => '2023-09-01 04:30',
+                'datetime_to' => '2023-09-01 07:30',
+            ],
+            [
+                'trip_id' => 1,
+                'city_from_id' => 10, // alfayum
+                'city_to_id' => 15, // alminia
+                'datetime_from' => '2023-09-12 08:00',
+                'datetime_to' => '2023-09-12 11:30',
+            ],
+            [
+                'trip_id' => 1,
+                'city_from_id' => 15, // alminia
+                'city_to_id' => 9, // asyut
+                'datetime_from' => '2023-09-12 08:00',
+                'datetime_to' => '2023-09-12 11:30',
+            ],
+        ];
     }
 }
