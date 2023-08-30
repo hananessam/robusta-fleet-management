@@ -9,6 +9,8 @@ class Seat extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function bus()
     {
         return $this->belongsTo(Bus::class);

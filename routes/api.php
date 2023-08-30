@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\TripController;
+use App\Http\Controllers\SeatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +26,13 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('user', [AuthController::class, 'user']);
 
+    // trips
     Route::group(['prefix' => 'trips'], function () {
         Route::get('', [TripController::class, 'trips']);
+    });
+
+    // seats
+    Route::group(['prefix' => 'seats'], function () {
+        Route::post('{id}/reserve', [SeatController::class, 'reserve']);
     });
 });
