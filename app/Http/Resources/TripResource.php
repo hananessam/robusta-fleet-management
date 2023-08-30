@@ -18,7 +18,7 @@ class TripResource extends JsonResource
             'id' => $this->id,
             'bus_id' => $this->bus_id,
             'stops' => StopResource::collection($this->stops),
-            'available_seats' => SeatResource::collection($this->available_seats),
+            // 'available_seats' => SeatResource::collection($this->available_seats),
         ];
     }
 }

@@ -17,6 +17,7 @@ class SeatResource extends JsonResource
         return [
             'id' => $this->id,
             'number' => $this->number,
+            'is_available' => true
         ];
     }
 }

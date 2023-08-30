@@ -18,9 +18,4 @@ class Trip extends Model
     {
         return $this->belongsTo(Bus::class);
     }
-
-    public function available_seats()
-    {
-        return $this->bus->seats()->where('is_available', 1);
-    }
 }
