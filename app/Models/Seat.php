@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Bus extends Model
+class Seat extends Model
 {
     use HasFactory;
 
-    public function seats()
+    public function bus()
     {
-        return $this->hasMany(Seat::class);
+        return $this->belongsTo(Bus::class);
     }
 }
