@@ -17,19 +17,21 @@ class TripRepository extends BaseRepository implements TripInterface
     {
         // filter by
         $models = $this->model->where(function ($query) use ($request) {
-            // start station
-            if($request->start_station) {
-                $query->whereHas('stops', function ($query) use ($request) {
-                    $query->where('city_from_id', $request->start_station);
-                });
-            }
+            $query->where(function ($query) use ($request) {
+                // start station
+                if ($request->start_station) {
+                    $query->whereHas('stops', function ($query) use ($request) {
+                        $query->where('city_from_id', $request->start_station);
+                    });
+                }
 
-            // end staion
-            if($request->end_station) {
-                $query->whereHas('stops', function ($query) use ($request) {
-                    $query->where('city_to_id', $request->end_station);
-                });
-            }
+                // end staion
+                if ($request->end_station) {
+                    $query->orWhereHas('stops', function ($query) use ($request) {
+                        $query->where('city_to_id', $request->end_station);
+                    });
+                }
+            });
 
             // start date
             if($request->date_time_from) {
