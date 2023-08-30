@@ -14,19 +14,7 @@ class SeatService
 
     public function available_seats($request) 
     {
-        // trip
-        $trip = $this->tripInterface->models($request);
-
-        // stops
-        $stops = $trip->first()->stops;
-
-        // included stops
-        $included_stops = $this->included_stops($stops, $request);
-
-        // available seats
-        $available_seats = $trip->first()->bus->seats()->whereDoesntHave('user_seats', function ($query) use ($request, $included_stops) {
-            $query->whereIn('stop_id', $included_stops->pluck('id'));
-        })->get();
+        $available_seats = $this->get_available_seats($request);
 
         $seats = SeatResource::collection($available_seats);
         return ['status' => 200, 'data' => ['seat' => $seats], 'errors' => []];
@@ -34,22 +22,12 @@ class SeatService
     
     public function reserve($request) 
     {
-        $request->merge([
-            'is_available' => 1
-        ]);
-        $models = $this->tripInterface->models($request);
-
-        $seat = $models->first();
-        if(!$seat){
-            return ['status' => 400, 'data' => [], 'errors' => ['error' => trans('not available')]];
-        }
+        $available_seats = $this->get_available_seats($request);
         
-        $reserve = $this->tripInterface->reserve($seat);
-        
-        if(!$reserve){
-            return ['status' => 500, 'data' => [], 'errors' => ['error' => trans('server error')]];
+        if(!$available_seats->contains('id', $request->seat_id)){
+            return ['status' => 400, 'data' => [], 'errors' => ['error' => trans('seat not available')]];
         }
-
+        $this->seatInterface->reserve($request->user()->id, $request->seat_id, 1);
         return ['status' => 200, 'data' => [], 'errors' => []];
     }
 
@@ -66,5 +44,24 @@ class SeatService
 
         $included_stops->push($ending_stop);
         return $included_stops;
+    }
+
+    private function get_available_seats($request)
+    {
+        // trip
+        $trip = $this->tripInterface->models($request);
+
+        // stops
+        $stops = $trip->first()->stops;
+
+        // included stops
+        $included_stops = $this->included_stops($stops, $request);
+
+        // available seats
+        $available_seats = $trip->first()->bus->seats()->whereDoesntHave('user_seats', function ($query) use ($request, $included_stops) {
+            $query->whereIn('stop_id', $included_stops->pluck('id'));
+        })->get();
+
+        return $available_seats;
     }
 }

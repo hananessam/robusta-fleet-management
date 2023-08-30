@@ -2,39 +2,41 @@
 
 namespace App\Repositories\Seat;
 
+use App\Models\UserSeat;
 use App\Repositories\Base\BaseRepository;
 use App\Models\Seat;
 
 class SeatRepository extends BaseRepository implements SeatInterface
 {
     public $model;
-    public function __construct(Seat $model)
+    public function __construct(Seat $model, public UserSeat $userSeat)
     {
         $this->model = $model;
     }
 
     public function models($request)
     {
+        //  filter by
         $models = $this->model->where(function ($query) use ($request) {
-            if($request->id) {
-                $query->where('id', $request->id);
-            }
-            if($request->is_available) {
-                $query->where('is_available', 1);
+            // trip id
+            if($request->trip_id) {
+                $query->whereHas('bus.trips', function ($query) use ($request) {
+                    $query->where('id', $request->start_station);
+                });
             }
         })->with($request->with ?: []);
 
-        return $models->get();
+        return dd($models->toSql());
     }
 
-    public function reserve($seat)
+    public function reserve($user_id, $seat_id, $stop_id)
     {
-        $model = \DB::transaction(function () use ($seat) {
-            $model = $seat->update([
-                'is_available' => 0
+        $model = \DB::transaction(function () use ($user_id, $seat_id, $stop_id) {
+            $model = $this->userSeat->create([
+                'user_id' => $user_id,
+                'seat_id' => $seat_id,
+                'stop_id' => $stop_id
             ]);
-
-            // reservation logic
 
             return $model;
         });
