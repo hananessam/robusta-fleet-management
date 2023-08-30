@@ -29,26 +29,30 @@ class StopSeeder extends Seeder
                 'datetime_to' => '2023-09-12 11:30',
             ],
             [
-                'trip_id' => 1,
+                'trip_id' => 2,
                 'city_from_id' => 1, // cairo
                 'city_to_id' => 10, // alfayum
                 'datetime_from' => '2023-09-01 04:30',
                 'datetime_to' => '2023-09-01 07:30',
             ],
             [
-                'trip_id' => 1,
+                'trip_id' => 2,
                 'city_from_id' => 10, // alfayum
                 'city_to_id' => 15, // alminia
                 'datetime_from' => '2023-09-12 08:00',
                 'datetime_to' => '2023-09-12 11:30',
             ],
             [
-                'trip_id' => 1,
+                'trip_id' => 2,
                 'city_from_id' => 15, // alminia
                 'city_to_id' => 9, // asyut
                 'datetime_from' => '2023-09-12 08:00',
                 'datetime_to' => '2023-09-12 11:30',
             ],
         ];
+
+        foreach ($stops as $key => $stop) {
+            \DB::table('stops')->insert($stop);
+        }
     }
 }
