@@ -14,6 +14,13 @@ class SeatController extends Controller
     {
     }
 
+    public function seats(Request $request)
+    {
+        $response = $this->seatService->available_seats($request);
+
+        return $this->responseService->response($response['status'], $response['data'], $response['errors']);
+    }
+
     public function reserve(Request $request)
     {
         $response = $this->seatService->reserve($request);

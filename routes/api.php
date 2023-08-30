@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // seats
     Route::group(['prefix' => 'seats'], function () {
+        Route::get('', [SeatController::class, 'seats']);
         Route::post('{id}/reserve', [SeatController::class, 'reserve']);
     });
 });

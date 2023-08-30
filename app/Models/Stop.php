@@ -23,4 +23,9 @@ class Stop extends Model
     {
         return $this->belongsTo(City::class, 'city_to_id');
     }
+
+    public function user_seats()
+    {
+        return $this->hasMany(UserSeat::class);
+    }
 }
