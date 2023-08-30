@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\TripController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,4 +24,8 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('user', [AuthController::class, 'user']);
+
+    Route::group(['prefix' => 'trips'], function () {
+        Route::get('', [TripController::class, 'trips']);
+    });
 });
