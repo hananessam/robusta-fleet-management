@@ -20,5 +20,17 @@ class UserService
 
         return ['status' => true, 'data' => ['token' => $token]];
     }
-    
+
+    public function login($request) 
+    {
+        $model = $this->userInterface->findByEmail($request->email);
+
+        if(!$model || !\Hash::check($request->password, $model->password)) {
+            return ['status' => false, 'errors' => [trans('credientials dosen\'t match')]];
+        };
+
+        $token = $model->createToken('login')?->plainTextToken;
+
+        return ['status' => true, 'data' => ['token' => $token]];
+    }
 }
