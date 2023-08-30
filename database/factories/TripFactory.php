@@ -17,9 +17,8 @@ class TripFactory extends Factory
      */
     public function definition(): array
     {
-        $buses = Bus::pluck('id');
         return [
-            'bus_id' => $buses->random()
+            'bus_id' => Bus::pluck('id')->random()
         ];
     }
 }
