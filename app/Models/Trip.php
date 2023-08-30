@@ -9,6 +9,11 @@ class Trip extends Model
 {
     use HasFactory;
 
+    public function stops()
+    {
+        return $this->hasMany(Stop::class);
+    }
+
     public function bus()
     {
         return $this->belongsTo(Bus::class);
