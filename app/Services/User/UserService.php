@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services\User;
+use App\Http\Resources\UserResource;
 use App\Repositories\User\UserInterface;
 
 class UserService 
@@ -32,5 +33,13 @@ class UserService
         $token = $model->createToken('login')?->plainTextToken;
 
         return ['status' => 200, 'data' => ['token' => $token], 'errors' => []];
+    }
+
+    public function user($request) 
+    {
+        $model = $request->user();
+
+        $user = new UserResource($model);
+        return ['status' => 200, 'data' => ['user' => $user], 'errors' => []];
     }
 }

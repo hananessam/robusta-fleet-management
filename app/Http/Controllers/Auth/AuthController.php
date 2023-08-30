@@ -27,4 +27,10 @@ class AuthController extends Controller
         $response = $this->userService->login($request);
         return $this->responseService->response($response['status'], $response['data'], $response['errors']);
     }
+
+    public function user(Request $request)
+    {
+        $response = $this->userService->user($request);
+        return $this->responseService->response($response['status'], $response['data'], $response['errors']);
+    }
 }
