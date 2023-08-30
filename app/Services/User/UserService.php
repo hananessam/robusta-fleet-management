@@ -13,12 +13,12 @@ class UserService
         $model = $this->userInterface->create($request->all());
 
         if(!$model) {
-            return ['status' => false, 'errors' => [trans('error')]];
+            return ['status' => 500, 'data' => [], 'errors' => [trans('error')]];
         }
 
         $token = $model->createToken('login')?->plainTextToken;
 
-        return ['status' => true, 'data' => ['token' => $token]];
+        return ['status' => 400, 'data' => ['token' => $token], 'errors' => []];
     }
 
     public function login($request) 
@@ -26,11 +26,11 @@ class UserService
         $model = $this->userInterface->findByEmail($request->email);
 
         if(!$model || !\Hash::check($request->password, $model->password)) {
-            return ['status' => false, 'errors' => [trans('credientials dosen\'t match')]];
+            return ['status' => 400, 'data' => [], 'errors' => [trans('credientials dosen\'t match')]];
         };
 
         $token = $model->createToken('login')?->plainTextToken;
 
-        return ['status' => true, 'data' => ['token' => $token]];
+        return ['status' => 200, 'data' => ['token' => $token], 'errors' => []];
     }
 }

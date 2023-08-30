@@ -19,21 +19,12 @@ class AuthController extends Controller
     {
         $response = $this->userService->create($request);
 
-        if(!$response['status']){
-            return $this->responseService->response(400, [], $response['errors']);
-        };
-
-        return $this->responseService->response(200, $response['data']);
+        return $this->responseService->response($response['status'], $response['data'], $response['errors']);
     }
 
     public function login(LoginRequest $request)
     {
         $response = $this->userService->login($request);
-
-        if(!$response['status']){
-            return $this->responseService->response(400, [], $response['errors']);
-        };
-
-        return $this->responseService->response(200, $response['data']);
+        return $this->responseService->response($response['status'], $response['data'], $response['errors']);
     }
 }
