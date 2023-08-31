@@ -14,7 +14,9 @@ class SeatService
 
     public function available_seats($request) 
     {
-        $available_seats = $this->get_available_seats($request);
+        // get_available_seats
+        $available_seats_data = $this->get_available_seats($request);
+        $available_seats = $available_seats_data['available_seats'];
 
         $seats = SeatResource::collection($available_seats);
         return ['status' => 200, 'data' => ['seat' => $seats], 'errors' => []];
@@ -22,12 +24,20 @@ class SeatService
     
     public function reserve($request) 
     {
-        $available_seats = $this->get_available_seats($request);
+        // get_available_seats
+        $available_seats_data = $this->get_available_seats($request);
+        $included_stops = $available_seats_data['included_stops'];
+        $available_seats = $available_seats_data['available_seats'];
         
+        // check if selected seat is available
         if(!$available_seats->contains('id', $request->seat_id)){
             return ['status' => 400, 'data' => [], 'errors' => ['error' => trans('seat not available')]];
         }
-        $this->seatInterface->reserve($request->user()->id, $request->seat_id, 1);
+
+        // reserve 
+        foreach ($included_stops as $key => $stop) {
+            $this->seatInterface->reserve($request->user()->id, $request->seat_id, $stop->id);
+        }
         return ['status' => 200, 'data' => [], 'errors' => []];
     }
 
@@ -62,6 +72,6 @@ class SeatService
             $query->whereIn('stop_id', $included_stops->pluck('id'));
         })->get();
 
-        return $available_seats;
+        return ['trip' => $trip, 'included_stops' => $included_stops, 'available_seats' => $available_seats];
     }
 }
